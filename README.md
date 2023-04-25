@@ -35,13 +35,13 @@ A serverless plugin to work with @vercel/ncc.
 With Yarn:
 
 ```sh
-yarn add serverless-vercel-ncc
+yarn add serverless-package-ncc
 ```
 
 With NPM:
 
 ```sh
-npm i serverless-vercel-ncc
+npm i serverless-package-ncc
 ```
 
 ## Usage
