@@ -12,15 +12,15 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          yarn
+          npm ci
 
       - name: Run Tests
         run: |
-          yarn test
+          npm test
 
       - name: Build
         run: |
-          yarn build
+          npm run build
 
       - name: Copy files
         run: |

@@ -13,11 +13,11 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          yarn
+          npm ci
 
       - name: Run Tests
         run: |
-          yarn test:cov
+          npm run test:cov
 
       - name: Collect Coverage
         uses: coverallsapp/github-action@v1.1.2
