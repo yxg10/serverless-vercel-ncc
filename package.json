@@ -1,59 +1,60 @@
 {
-	"name": "serverless-vercel-ncc",
-	"version": "0.0.7",
-	"main": "index.js",
-	"types": "index.d.ts",
-	"license": "Apache-2.0",
-	"author": "Techmmunity",
-	"description": "Serverless Framework plugin to work with @vercel/ncc",
-	"homepage": "https://github.com/techmmunity/serverless-vercel-ncc#readme",
-	"bugs": {
-		"url": "https://github.com/techmmunity/serverless-vercel-ncc/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/techmmunity/serverless-vercel-ncc.git"
-	},
-	"keywords": [
-		"serverless",
-		"serverless framework",
-		"serverless-framework",
-		"serverless plugin",
-		"serverless-plugin",
-		"@vercel/ncc",
-		"webpack",
-		"minify"
-	],
-	"devDependencies": {
-		"@techmmunity/eslint-config": "^5.1.3",
-		"@types/jest": "^27.0.3",
-		"@types/serverless": "^1.78.39",
-		"cross-env": "^7.0.3",
-		"eslint": "^8.4.0",
-		"husky": "^7.0.4",
-		"jest": "^27.4.3",
-		"lint-staged": "^12.1.2",
-		"prettier": "^2.5.1",
-		"ts-jest": "^27.0.7",
-		"ts-node": "^10.4.0",
-		"typescript": "^4.5.2"
-	},
-	"dependencies": {
-		"@techmmunity/utils": "^1.9.0",
-		"@vercel/ncc": "^0.33.1",
-		"jszip": "^3.7.1"
-	},
-	"scripts": {
-		"prepare": "husky install",
-		"ts-node": "ts-node",
-		"test": "jest",
-		"test:cov": "jest --coverage",
-		"build": "cross-env NODE_OPTIONS=--openssl-legacy-provider ncc build src/index.ts -o dist -m -s -e serverless -e fs -e @vercel/ncc --no-source-map-register",
-		"format": "eslint . --fix --quiet",
-		"lint": "eslint . --quiet",
-		"upgrade-dependencies": "yarn upgrade-interactive --latest",
-		"husky:pre-commit": "tsc",
-		"lk": "yarn build && cp package.json dist/package.json && cd dist && yarn link && cd ..",
-		"ulk": "yarn unlink && yarn lk"
-	}
+  "name": "serverless-package-ncc",
+  "version": "0.0.8",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "Apache-2.0",
+  "author": "yxg10",
+  "description": "Serverless Framework plugin to work with @vercel/ncc",
+  "homepage": "https://github.com/yxg10/serverless-vercel-ncc#readme",
+  "bugs": {
+    "url": "https://github.com/yxg10/serverless-vercel-ncc/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yxg10/serverless-vercel-ncc.git"
+  },
+  "keywords": [
+    "serverless",
+    "serverless framework",
+    "serverless-framework",
+    "serverless plugin",
+    "serverless-plugin",
+    "@vercel/ncc",
+    "webpack",
+    "minify"
+  ],
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "@types/serverless": "^1.78.39",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "husky": "^7.0.4",
+    "jest": "^27.4.5",
+    "lint-staged": "^13.2.1",
+    "prettier": "2.8.8",
+    "shx": "^0.3.4",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@vercel/ncc": "^0.36.1",
+    "jszip": "^3.7.1"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "ts-node": "ts-node",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "build": "cross-env ncc build src/index.ts -o dist -m -s -e serverless -e fs -e @vercel/ncc --no-source-map-register",
+    "format": "eslint . --fix --quiet",
+    "lint": "eslint . --quiet",
+    "husky:pre-commit": "tsc",
+    "lk": "npm run build && shx cp package.json dist/package.json && cd dist && npm pkg delete scripts.prepare && npm link && cd ..",
+    "ulk": "npm unlink && npm run lk"
+  }
 }
