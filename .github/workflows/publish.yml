@@ -35,7 +35,7 @@ jobs:
       - name: Setup Package Manager
         uses: actions/setup-node@master
         with:
-          node-version: 14
+          node-version: 18
           registry-url: "https://registry.npmjs.org/"
 
       - name: Install the most recent version of NPM
@@ -47,7 +47,7 @@ jobs:
         # This script must be removed because it uses
         # a devDependency and they doesn't exist in this context
         run: |
-          cd ./dist && npm set-script prepare "" && cd ..
+          cd ./dist && npm pkg delete scripts.prepare && cd ..
 
       - name: Publish to NPM
         run: |
