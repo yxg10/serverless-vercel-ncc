@@ -55,6 +55,6 @@
     "lint": "eslint . --quiet",
     "husky:pre-commit": "tsc",
     "lk": "npm run build && shx cp package.json dist/package.json && cd dist && npm pkg delete scripts.prepare && npm link && cd ..",
-    "ulk": "npm unlink && npm run lk"
+    "ulk": "npm unlink -g"
   }
 }
