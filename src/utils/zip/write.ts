@@ -3,21 +3,16 @@ import * as JSZip from "jszip";
 
 interface WriteParams {
   zipName: string;
-  filePath: string;
-  content: string;
+  files: { path: string; content: string | Buffer }[];
   outputPath: string;
 }
 
-export const writeZip = ({
-  filePath,
-  zipName,
-  content,
-  outputPath,
-}: WriteParams) =>
+export const writeZip = ({ zipName, files, outputPath }: WriteParams) =>
   new Promise((resolve, reject) => {
     const zip = new JSZip();
-
-    zip.file(`${filePath}.js`, content);
+    files.forEach((file) => {
+      zip.file(file.path, file.content);
+    });
 
     zip
       .generateNodeStream({ type: "nodebuffer", streamFiles: true })

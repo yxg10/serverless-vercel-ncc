@@ -3,6 +3,7 @@
 import * as Ncc from "@vercel/ncc";
 import type { FunctionDefinitionHandler } from "serverless";
 import { existsSync } from "fs";
+import * as path from "path";
 
 import { getRootPath } from "utils/get-root-path";
 import { Context } from "types/context";
@@ -77,25 +78,39 @@ export const compileAndZip = ({
     funcName
   ] as FunctionDefinitionHandler;
 
-  const { rootPath, path } = getHandlerPath(func.handler);
+  const { rootPath, path: handlerPath } = getHandlerPath(func.handler);
 
   return Ncc(rootPath, {
     externals,
-    quiet: true,
+    quiet: false,
     minify: context.opt?.minify,
     sourceMap: context.opt?.sourceMap,
     sourceMapRegister: context.opt?.sourceMapRegister,
-  }).then(({ code }) =>
+  }).then(({ code, assets }) => {
+    const handlerFolder = handlerPath.substring(
+      0,
+      handlerPath.lastIndexOf("/")
+    );
     writeZip({
-      filePath: path,
+      files: [
+        {
+          path: `${handlerPath}.js`,
+          content: code,
+        },
+        ...Object.entries(assets || {}).map(([fileName, content]) => {
+          return {
+            path: path.join(handlerFolder, fileName),
+            content: content.source,
+          };
+        }),
+      ],
       zipName: funcName,
-      content: code,
       outputPath: serverlessFolderPath,
     }).then(() => {
       // Only sets the new values if successfully writes the zip file
       func.package = {
         artifact: `${serverlessFolderPath}/${funcName}.zip`,
       };
-    })
-  );
+    });
+  });
 };
