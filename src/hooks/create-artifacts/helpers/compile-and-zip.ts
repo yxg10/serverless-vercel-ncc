@@ -67,7 +67,7 @@ const findValidHandlerPath = (pathName: string): string | null => {
   return null;
 };
 
-export const compileAndZip = ({
+export const compileAndZip = async ({
   funcName,
   context,
   serverlessFolderPath,
@@ -79,19 +79,17 @@ export const compileAndZip = ({
   ] as FunctionDefinitionHandler;
 
   const { rootPath, path: handlerPath } = getHandlerPath(func.handler);
-
-  return Ncc(rootPath, {
+  const { code, assets } = await Ncc(rootPath, {
     externals,
     quiet: false,
     minify: context.opt?.minify,
     sourceMap: context.opt?.sourceMap,
     sourceMapRegister: context.opt?.sourceMapRegister,
-  }).then(({ code, assets }) => {
-    const handlerFolder = handlerPath.substring(
-      0,
-      handlerPath.lastIndexOf("/")
-    );
-    writeZip({
+  });
+
+  const handlerFolder = handlerPath.substring(0, handlerPath.lastIndexOf("/"));
+  try {
+    await writeZip({
       files: [
         {
           path: `${handlerPath}.js`,
@@ -106,11 +104,12 @@ export const compileAndZip = ({
       ],
       zipName: funcName,
       outputPath: serverlessFolderPath,
-    }).then(() => {
-      // Only sets the new values if successfully writes the zip file
-      func.package = {
-        artifact: `${serverlessFolderPath}/${funcName}.zip`,
-      };
     });
-  });
+    // Only sets the new values if successfully writes the zip file
+    func.package = {
+      artifact: `${serverlessFolderPath}/${funcName}.zip`,
+    };
+  } catch (e) {
+    console.error("Failed to zip", e);
+  }
 };
